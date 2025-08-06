@@ -12,6 +12,8 @@ from utils.utils import import_problem_module  # noqa: E402 pylint: disable=wron
 {{ problem.get_slug_underscored() }} = import_problem_module("{{problem.slug}}", "{{path}}")
 
 
+# Note: The expected values should be filled based on the problem requirements
+# Note: You can add your own test cases here
 # TODO: Fill the expected values for the test cases
 @pytest.mark.parametrize('args,expected', [
 {% for case in problem.extract_example_cases() %}    (({{ case | join(', ') }},), None),
