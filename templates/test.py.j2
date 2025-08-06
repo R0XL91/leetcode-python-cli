@@ -1,21 +1,20 @@
+# Tests for problem: {{ problem.frontend_id }} {{ problem.title }} ({{ problem.difficulty }})
 import sys
 import os
 
 import pytest
 
-# Ensure the utils module can be imported correctly
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../../..')))
+# This is needed to ensure the project path is in sys.path for imports
+sys.path.insert(0, "{{project_path}}")
 
 # This is needed to import the problem module correctly due to the slash in the slug
 from utils.utils import import_problem_module  # noqa: E402 pylint: disable=wrong-import-position
-{{ problem.get_slug_underscored() }} = import_problem_module("{{problem.slug}}")
+{{ problem.get_slug_underscored() }} = import_problem_module("{{problem.slug}}", "{{path}}")
 
 
-# Fill the expected values for the test cases
+# TODO: Fill the expected values for the test cases
 @pytest.mark.parametrize('args,expected', [
-{% for case in problem.extract_example_cases() %}    (({{ case | join(', ') }}), None),
+{% for case in problem.extract_example_cases() %}    (({{ case | join(', ') }},), None),
 {% endfor %}])
 def test_solution(args, expected):
-    # Call your solution function and compare with expected
     assert {{ problem.get_slug_underscored() }}.Solution().{{ problem.get_method_name() }}(*args) == expected
-
