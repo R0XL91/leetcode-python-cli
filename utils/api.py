@@ -12,7 +12,7 @@ def get_all_problems():
         response = requests.get(LEETCODE_API_URL, timeout=10)
         response.raise_for_status()
     except RequestException as exc:
-        raise RuntimeError("No se pudo acceder a la API de LeetCode.") from exc
+        raise RuntimeError("Could not access the LeetCode API.") from exc
     data = response.json()
     return data['stat_status_pairs']
 
@@ -48,11 +48,11 @@ def fetch_problem(slug):
         response.raise_for_status()
     except RequestException as exc:
         raise RuntimeError(
-            "No se pudo acceder a la API GraphQL de LeetCode."
+            "Could not access the LeetCode GraphQL API."
         ) from exc
     question = response.json().get('data', {}).get('question')
     if not question:
-        raise ValueError("No se encontró el detalle del ejercicio.")
+        raise ValueError("Could not find the problem details.")
     code = [snippet['code'] for snippet in question['codeSnippets'] if snippet['langSlug'] == 'python3']
     return Problem(
         id=question['questionId'],
